@@ -33,25 +33,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _productBloc.close();
   }
 
-  List<charts.Series<TimeSeriesSales, DateTime>> _createDataChartsTimeSeries(
-      BuiltList<Shopping> shopping) {
-    List<TimeSeriesSales> data = [];
-
-    for (var item in shopping) {
-      data.add(new TimeSeriesSales(DateTime.parse(item.date), item.price));
-    }
-
-    return [
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
-
   String _getLowestPrice(BuiltList<Shopping> shopping) {
     shopping.toList().sort((a, b) => a.price.compareTo(b.price));
 
@@ -74,16 +55,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return shopping.last.price.toStringAsFixed(2);
   }
 
-  Text _getTextWidget(String text) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 25,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProductBloc>(
@@ -101,153 +72,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               } else if (state.isSuccessful) {
                 return CustomScrollView(
                   slivers: <Widget>[
-                    SliverAppBar(
-                      leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            ExtendedNavigator.of(context).pop();
-                          }),
-                      expandedHeight: 400,
-                      backgroundColor: Colors.black,
-                      pinned: true,
-                      floating: true,
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        titlePadding: EdgeInsetsDirectional.only(start: 0),
-                        title: Text(
-                          state.product.data.name,
-                          textAlign: TextAlign.justify,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textScaleFactor: 0.7,
-                        ),
-                        // Stack orders children behind each other
-                        background: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            InternalCachedNetworkImage(
-                              url: state.product.data.imageUrl,
-                              fit: BoxFit.cover,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  stops: [0.15, 0.5],
-                                  colors: [
-                                    Colors.black.withOpacity(0.7),
-                                    Colors.transparent,
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(8.0),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(
-                          <Widget>[
-                            SizedBox(height: 5),
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        "Lowest Price:",
-                                        textAlign: TextAlign.justify,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                        ),
-                                      ),
-                                      Chip(
-                                        backgroundColor: Colors.redAccent,
-                                        padding: EdgeInsets.all(10),
-                                        label: Text(
-                                            _getLowestPrice(
-                                                state.product.data.shopping),
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        "Average Prices:",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                        ),
-                                      ),
-                                      Chip(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        padding: EdgeInsets.all(10),
-                                        label: Text(
-                                            _getAveragePrice(
-                                                state.product.data.shopping),
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      _getTextWidget("Highest Price:"),
-                                      Chip(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        padding: EdgeInsets.all(10),
-                                        label: Text(
-                                            _getHighestPrice(
-                                                state.product.data.shopping),
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 50),
-                            Container(
-                              height: 400,
-                              child: Card(
-                                  child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: state.product.data.shopping != null
-                                          ? TimeSeriesChart(
-                                              _createDataChartsTimeSeries(
-                                                  state.product.data.shopping))
-                                          : BlankScreen(),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
+                    _getSliverAppBar(context, state),
+                    _getSliverPadding(state)
                   ],
                 );
               } else {
@@ -259,5 +85,179 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       create: (BuildContext context) => _productBloc,
     );
+  }
+
+  SliverPadding _getSliverPadding(ProductState state) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(8.0),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          <Widget>[
+            SizedBox(height: 5),
+            _getMiddleContainer(state),
+            SizedBox(height: 50),
+            Container(
+              height: 400,
+              child: _getCardWidget(state),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card _getCardWidget(ProductState state) {
+    return Card(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          _getExpandedWidget(state),
+        ],
+      ),
+    ));
+  }
+
+  Expanded _getExpandedWidget(ProductState state) {
+    return Expanded(
+      child: state.product.data.shopping != null
+          ? TimeSeriesChart(
+              _createDataChartsTimeSeries(state.product.data.shopping))
+          : BlankScreen(),
+    );
+  }
+
+  SliverAppBar _getSliverAppBar(BuildContext context, ProductState state) {
+    return SliverAppBar(
+      leading: _getIconButton(context),
+      expandedHeight: 200,
+      pinned: true,
+      floating: true,
+      flexibleSpace: _getFlexibleSpaceBar(state),
+    );
+  }
+
+  FlexibleSpaceBar _getFlexibleSpaceBar(ProductState state) {
+    return FlexibleSpaceBar(
+      centerTitle: true,
+      titlePadding: EdgeInsetsDirectional.only(start: 0),
+      title: Text(
+        state.product.data.name,
+        textAlign: TextAlign.justify,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textScaleFactor: 0.7,
+      ),
+      background: _getBackgroundStack(state),
+    );
+  }
+
+  Stack _getBackgroundStack(ProductState state) {
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        _getImage(state),
+        _getContainerOpacity(),
+      ],
+    );
+  }
+
+  Container _getMiddleContainer(ProductState state) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _getRow(
+            "Lowest Price:",
+            _getLowestPrice(state.product.data.shopping),
+          ),
+          SizedBox(height: 5),
+          _getRow(
+            "Average Prices:",
+            _getAveragePrice(state.product.data.shopping),
+          ),
+          SizedBox(height: 5),
+          _getRow(
+            "Highest Price:",
+            _getHighestPrice(state.product.data.shopping),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row _getRow(String textBoxText, String chipText) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        _getTextWidget(textBoxText),
+        _getChipWidget(chipText),
+      ],
+    );
+  }
+
+  Container _getContainerOpacity() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          stops: [0.15, 0.5],
+          colors: [
+            Colors.black.withOpacity(0.7),
+            Colors.transparent,
+          ],
+        ),
+      ),
+    );
+  }
+
+  InternalCachedNetworkImage _getImage(ProductState state) {
+    return InternalCachedNetworkImage(
+      url: state.product.data.imageUrl,
+      fit: BoxFit.cover,
+    );
+  }
+
+  IconButton _getIconButton(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.arrow_back),
+        color: Colors.black,
+        onPressed: () {
+          ExtendedNavigator.of(context).pop();
+        });
+  }
+
+  Text _getTextWidget(String text, {Color color = Colors.black}) {
+    return Text(
+      text,
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: color),
+    );
+  }
+
+  Chip _getChipWidget(String text) {
+    return Chip(
+      backgroundColor: Theme.of(context).primaryColor,
+      padding: EdgeInsets.all(10),
+      label: _getTextWidget(text, color: Colors.white),
+    );
+  }
+
+  List<charts.Series<TimeSeriesSales, DateTime>> _createDataChartsTimeSeries(
+      BuiltList<Shopping> shopping) {
+    List<TimeSeriesSales> data = [];
+
+    for (var item in shopping) {
+      data.add(new TimeSeriesSales(DateTime.parse(item.date), item.price));
+    }
+
+    return [
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
   }
 }
