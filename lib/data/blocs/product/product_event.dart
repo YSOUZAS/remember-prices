@@ -1,6 +1,7 @@
 library product_event;
 
 import 'package:built_value/built_value.dart';
+import 'package:remember_prices/data/models/product/index.dart';
 
 part 'product_event.g.dart';
 
@@ -34,10 +35,8 @@ abstract class ProductDelete extends ProductEvent
 
 abstract class ProductEdit extends ProductEvent
     implements Built<ProductEdit, ProductEditBuilder> {
-  @nullable
-  String get documentID;
-  @nullable
-  String get name;
+  String get documentId;
+  Shopping get shopping;
   ProductEdit._();
 
   factory ProductEdit([updates(ProductEditBuilder b)]) = _$ProductEdit;

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:remember_prices/data/blocs/product/product_event.dart';
 import 'package:remember_prices/data/blocs/product/product_state.dart';
+import 'package:remember_prices/data/models/product/index.dart';
 import 'package:remember_prices/data/repositories/firebase/index.dart';
 
 import 'product_state.dart';
@@ -22,9 +23,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   void onDeleteProduct(String documentID) =>
       add(ProductDelete((b) => b..documentID = documentID));
 
-  void onEditProduct(String documentID, String name) => add(ProductEdit((b) => b
-    ..documentID = documentID
-    ..name = name));
+  void onEditProduct(String documentId, Shopping shopping) =>
+      add(ProductEdit((b) => b
+        ..documentId = documentId
+        ..shopping.replace(shopping)));
 
   void onGetById(String documentID) =>
       add(ProductGetById((b) => b..documentID = documentID));
@@ -69,8 +71,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Stream<ProductState> mapProductProductEdit(ProductEdit event) async* {
     try {
-      await _repository.editProduct(event.documentID, event.name);
-      onProductInitiated();
+      final result =
+          await _repository.editProduct(event.documentId, event.shopping);
+      yield ProductState.successGetById(result);
     } on Exception catch (e) {
       yield ProductState.failure(e.toString());
     }

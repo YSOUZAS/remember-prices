@@ -29,18 +29,18 @@ class ProductRepository {
     final document = await _productDataSource.getProductByID(documentID);
     var mapProduct = ProductConverter.toMap(document);
     var product = Product.fromJson(mapProduct);
-    BuiltList<Shopping> newShopping = product.data.shopping;
+    BuiltList<Shopping> newShopping = product.data.shoppings;
 
-    if (product.data.shopping != null) {
-      var length = product.data.shopping.length;
+    if (product.data.shoppings != null) {
+      var length = product.data.shoppings.length;
       for (var i = 0; i < length; i++) {
-        var element = product.data.shopping[i];
+        var element = product.data.shoppings[i];
         var brand = await this._brandRepository.getBrandByID(element.brandId);
         newShopping = newShopping.rebuild(
             (sh) => sh[i] = sh[i].rebuild((s) => s..brand.replace(brand)));
       }
       var dataProduct =
-          product.data.rebuild((s) => s..shopping.replace(newShopping));
+          product.data.rebuild((s) => s..shoppings.replace(newShopping));
       return product.rebuild((b) => b..data.replace(dataProduct));
     }
 
@@ -53,6 +53,19 @@ class ProductRepository {
   Future<void> deleteProduct(String documentID) async =>
       await _productDataSource.deleteProduct(documentID);
 
-  Future<void> editProduct(String documentID, String name) async =>
-      await _productDataSource.editProduct(documentID, name);
+  Future<String> getDocumentIdByBarcode(String barcode) async {
+    var document = await _productDataSource.getDocumentIdByBarcode(barcode);
+    var mapProduct = ProductConverter.toMap(document);
+    var product = Product.fromJson(mapProduct);
+
+    return product.documentID;
+  }
+
+  Future<Product> editProduct(String documentID, Shopping shopping) async {
+    var product = await this.getProductByID(documentID);
+    var newShopping = product.data.shoppings.rebuild((b) => b..add(shopping));
+    await _productDataSource.editProduct(documentID, newShopping.toList());
+
+    return this.getProductByID(documentID);
+  }
 }

@@ -16,7 +16,7 @@ abstract class DataProduct implements Built<DataProduct, DataProductBuilder> {
   String get barcode;
 
   @nullable
-  BuiltList<Shopping> get shopping;
+  BuiltList<Shopping> get shoppings;
 
   DataProduct._();
 

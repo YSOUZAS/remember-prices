@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:remember_prices/data/repositories/firebase/index.dart';
 import 'package:remember_prices/routes/router.gr.dart';
+import 'package:remember_prices/services/barcode.dart';
 import 'package:remember_prices/shared/widgets/index.dart';
 import 'package:remember_prices/utils/index.dart';
+import 'package:kiwi/kiwi.dart' as kiwi;
 
 class HomePage extends StatefulWidget {
   static const String routeName = '/home';
@@ -17,7 +20,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          var result = await Barcode.scan();
+          final productRepository =
+              kiwi.Container().resolve<ProductRepository>();
+          var documentId =
+              await productRepository.getDocumentIdByBarcode(result);
+          ExtendedNavigator.of(context).pushNamed(Routes.productDetailScreen,
+              arguments: ProductDetailScreenArguments(documentId: documentId));
+        },
         child: Icon(FontAwesomeIcons.barcode),
       ),
       backgroundColor: Theme.of(context).backgroundColor,

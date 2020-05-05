@@ -7,6 +7,7 @@ import 'package:remember_prices/data/blocs/product/product_bloc.dart';
 import 'package:remember_prices/data/blocs/product/product_state.dart';
 import 'package:remember_prices/routes/router.gr.dart';
 import 'package:remember_prices/shared/screens/index.dart';
+import 'package:remember_prices/shared/widgets/horizontal_card.dart';
 import 'package:remember_prices/shared/widgets/internal_cached_network_image.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -32,6 +33,12 @@ class _ProductsPageState extends State<ProductsPage> {
     _productBloc.close();
   }
 
+  void _goToProductDetail(BuildContext context, ProductState state, int index) {
+    ExtendedNavigator.of(context).pushNamed(Routes.productDetailScreen,
+        arguments: ProductDetailScreenArguments(
+            documentId: state.products[index].documentID));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProductBloc>(
@@ -48,40 +55,34 @@ class _ProductsPageState extends State<ProductsPage> {
               return ListView.builder(
                 itemCount: state.products.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      _goToProductDetail(context, state, index);
-                    },
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                  return new GestureDetector(
+                      onTap: () {
+                        _goToProductDetail(context, state, index);
+                      },
+                      child: new Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 16.0,
+                          horizontal: 24.0,
+                        ),
+                        child: new Stack(
                           children: <Widget>[
-                            Container(
-                              child: InternalCachedNetworkImage(
-                                width: 200,
-                                height: 200,
-                                url: state.products[index].data?.imageUrl
-                                    ?.toString(),
-                                fit: BoxFit.cover,
-                              ),
+                            HorizontalCard(
+                              child:
+                                  _getContent(state.products[index].data.name),
                             ),
-                            SizedBox(height: 5),
-                            Text(
-                              state.products[index].data.name,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  topLeft: Radius.circular(8)),
+                              child: InternalCachedNetworkImage(
+                                url: state.products[index].data.imageUrl,
+                                height: 130.0,
+                                width: 92.0,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  );
+                      ));
                 },
               );
             } else {
@@ -94,9 +95,89 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  void _goToProductDetail(BuildContext context, ProductState state, int index) {
-    ExtendedNavigator.of(context).pushNamed(Routes.productDetailScreen,
-        arguments: ProductDetailScreenArguments(
-            documentId: state.products[index].documentID));
+  Container _getContent(
+    String name,
+  ) {
+    return new Container(
+      margin: new EdgeInsets.fromLTRB(76.0, 16.0, 16.0, 16.0),
+      constraints: new BoxConstraints.expand(),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Container(height: 4.0),
+          new Text(
+            name,
+            maxLines: 1,
+            style: const TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
+          ),
+          /* new Container(height: 10.0),
+          new Text(
+            "dsaasddsaads",
+            style: const TextStyle(
+                fontFamily: 'Poppins',
+                color: const Color(0xffb6b2df),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400),
+          ),
+  
+
+          new Container(
+              margin: new EdgeInsets.symmetric(vertical: 8.0),
+              height: 2.0,
+              width: 18.0,
+              color: new Color(0xff00c6ff)),
+          new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Expanded(
+                flex: 1,
+                child: new Container(
+                  child: new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.dollarSign,
+                        ),
+                        new Text(
+                          "7.90",
+                          style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ]),
+                ),
+              ),
+              new Container(
+                width: 8.0,
+              ),
+              new Expanded(
+                flex: 1,
+                child: new Container(
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(FontAwesomeIcons.cartPlus),
+                      new Container(width: 8.0),
+                      new Text(
+                        "1",
+                        style: const TextStyle(
+                            fontFamily: 'Poppins', fontSize: 9.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+       */
+        ],
+      ),
+    );
   }
 }

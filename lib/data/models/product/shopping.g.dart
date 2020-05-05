@@ -17,16 +17,25 @@ class _$ShoppingSerializer implements StructuredSerializer<Shopping> {
   @override
   Iterable<Object> serialize(Serializers serializers, Shopping object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'brandId',
-      serializers.serialize(object.brandId,
-          specifiedType: const FullType(String)),
-      'price',
-      serializers.serialize(object.price,
-          specifiedType: const FullType(double)),
-      'date',
-      serializers.serialize(object.date, specifiedType: const FullType(String)),
-    ];
+    final result = <Object>[];
+    if (object.brandId != null) {
+      result
+        ..add('brandId')
+        ..add(serializers.serialize(object.brandId,
+            specifiedType: const FullType(String)));
+    }
+    if (object.price != null) {
+      result
+        ..add('price')
+        ..add(serializers.serialize(object.price,
+            specifiedType: const FullType(double)));
+    }
+    if (object.date != null) {
+      result
+        ..add('date')
+        ..add(serializers.serialize(object.date,
+            specifiedType: const FullType(String)));
+    }
     if (object.brand != null) {
       result
         ..add('brand')
@@ -97,17 +106,7 @@ class _$Shopping extends Shopping {
 
   _$Shopping._(
       {this.brandId, this.price, this.date, this.brand, this.promotion})
-      : super._() {
-    if (brandId == null) {
-      throw new BuiltValueNullFieldError('Shopping', 'brandId');
-    }
-    if (price == null) {
-      throw new BuiltValueNullFieldError('Shopping', 'price');
-    }
-    if (date == null) {
-      throw new BuiltValueNullFieldError('Shopping', 'date');
-    }
-  }
+      : super._();
 
   @override
   Shopping rebuild(void Function(ShoppingBuilder) updates) =>

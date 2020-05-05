@@ -60,7 +60,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return BlocProvider<ProductBloc>(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            var shopping = new Shopping();
+
+            //\",\"price\":5.8,\"date\":\\
+
+            shopping = shopping.rebuild((b) => b
+              ..brandId = "9nZiyVCdgK7zYg630BRh"
+              ..date = "20170919"
+              ..price = 10.9);
+
+            _productBloc.onEditProduct(widget.documentId, shopping);
+          },
           child: Icon(FontAwesomeIcons.plus),
         ),
         backgroundColor: Theme.of(context).backgroundColor,
@@ -120,9 +131,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Expanded _getExpandedWidget(ProductState state) {
     return Expanded(
-      child: state.product.data.shopping != null
+      child: state.product.data.shoppings != null
           ? TimeSeriesChart(
-              _createDataChartsTimeSeries(state.product.data.shopping))
+              _createDataChartsTimeSeries(state.product.data.shoppings))
           : BlankScreen(),
     );
   }
@@ -168,30 +179,46 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         children: <Widget>[
           _getRow(
             "Lowest Price:",
-            _getLowestPrice(state.product.data.shopping),
+            _getLowestPrice(state.product.data.shoppings),
           ),
           SizedBox(height: 5),
           _getRow(
             "Average Prices:",
-            _getAveragePrice(state.product.data.shopping),
+            _getAveragePrice(state.product.data.shoppings),
           ),
           SizedBox(height: 5),
           _getRow(
             "Highest Price:",
-            _getHighestPrice(state.product.data.shopping),
+            _getHighestPrice(state.product.data.shoppings),
           ),
         ],
       ),
     );
   }
 
-  Row _getRow(String textBoxText, String chipText) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        _getTextWidget(textBoxText),
-        _getChipWidget(chipText),
-      ],
+  Container _getRow(String textBoxText, String chipText) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _getTextWidget(textBoxText),
+          _getTextWidget(chipText),
+        ],
+      ),
+      height: 50.0,
+      margin: new EdgeInsets.only(left: 1.0),
+      decoration: new BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        shape: BoxShape.rectangle,
+        borderRadius: new BorderRadius.circular(8.0),
+        boxShadow: <BoxShadow>[
+          new BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10.0,
+            offset: new Offset(0.0, 10.0),
+          ),
+        ],
+      ),
     );
   }
 
@@ -227,18 +254,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         });
   }
 
-  Text _getTextWidget(String text, {Color color = Colors.black}) {
-    return Text(
-      text,
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: color),
-    );
-  }
-
-  Chip _getChipWidget(String text) {
-    return Chip(
-      backgroundColor: Theme.of(context).primaryColor,
-      padding: EdgeInsets.all(10),
-      label: _getTextWidget(text, color: Colors.white),
+  Padding _getTextWidget(String text, {Color color = Colors.black}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+      ),
     );
   }
 

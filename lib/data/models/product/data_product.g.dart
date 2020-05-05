@@ -27,10 +27,10 @@ class _$DataProductSerializer implements StructuredSerializer<DataProduct> {
       serializers.serialize(object.barcode,
           specifiedType: const FullType(String)),
     ];
-    if (object.shopping != null) {
+    if (object.shoppings != null) {
       result
-        ..add('shopping')
-        ..add(serializers.serialize(object.shopping,
+        ..add('shoppings')
+        ..add(serializers.serialize(object.shoppings,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(Shopping)])));
     }
@@ -60,8 +60,8 @@ class _$DataProductSerializer implements StructuredSerializer<DataProduct> {
           result.barcode = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'shopping':
-          result.shopping.replace(serializers.deserialize(value,
+        case 'shoppings':
+          result.shoppings.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(Shopping)]))
               as BuiltList<Object>);
@@ -81,12 +81,12 @@ class _$DataProduct extends DataProduct {
   @override
   final String barcode;
   @override
-  final BuiltList<Shopping> shopping;
+  final BuiltList<Shopping> shoppings;
 
   factory _$DataProduct([void Function(DataProductBuilder) updates]) =>
       (new DataProductBuilder()..update(updates)).build();
 
-  _$DataProduct._({this.name, this.imageUrl, this.barcode, this.shopping})
+  _$DataProduct._({this.name, this.imageUrl, this.barcode, this.shoppings})
       : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('DataProduct', 'name');
@@ -113,14 +113,14 @@ class _$DataProduct extends DataProduct {
         name == other.name &&
         imageUrl == other.imageUrl &&
         barcode == other.barcode &&
-        shopping == other.shopping;
+        shoppings == other.shoppings;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc($jc($jc(0, name.hashCode), imageUrl.hashCode), barcode.hashCode),
-        shopping.hashCode));
+        shoppings.hashCode));
   }
 
   @override
@@ -129,7 +129,7 @@ class _$DataProduct extends DataProduct {
           ..add('name', name)
           ..add('imageUrl', imageUrl)
           ..add('barcode', barcode)
-          ..add('shopping', shopping))
+          ..add('shoppings', shoppings))
         .toString();
   }
 }
@@ -149,10 +149,11 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
   String get barcode => _$this._barcode;
   set barcode(String barcode) => _$this._barcode = barcode;
 
-  ListBuilder<Shopping> _shopping;
-  ListBuilder<Shopping> get shopping =>
-      _$this._shopping ??= new ListBuilder<Shopping>();
-  set shopping(ListBuilder<Shopping> shopping) => _$this._shopping = shopping;
+  ListBuilder<Shopping> _shoppings;
+  ListBuilder<Shopping> get shoppings =>
+      _$this._shoppings ??= new ListBuilder<Shopping>();
+  set shoppings(ListBuilder<Shopping> shoppings) =>
+      _$this._shoppings = shoppings;
 
   DataProductBuilder();
 
@@ -161,7 +162,7 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
       _name = _$v.name;
       _imageUrl = _$v.imageUrl;
       _barcode = _$v.barcode;
-      _shopping = _$v.shopping?.toBuilder();
+      _shoppings = _$v.shoppings?.toBuilder();
       _$v = null;
     }
     return this;
@@ -189,12 +190,12 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
               name: name,
               imageUrl: imageUrl,
               barcode: barcode,
-              shopping: _shopping?.build());
+              shoppings: _shoppings?.build());
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'shopping';
-        _shopping?.build();
+        _$failedField = 'shoppings';
+        _shoppings?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'DataProduct', _$failedField, e.toString());
