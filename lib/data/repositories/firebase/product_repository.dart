@@ -29,21 +29,6 @@ class ProductRepository {
     final document = await _productDataSource.getProductByID(documentID);
     var mapProduct = ProductConverter.toMap(document);
     var product = Product.fromJson(mapProduct);
-    BuiltList<Shopping> newShopping = product.data.shoppings;
-
-    if (product.data.shoppings != null) {
-      var length = product.data.shoppings.length;
-      for (var i = 0; i < length; i++) {
-        var element = product.data.shoppings[i];
-        var brand = await this._brandRepository.getBrandByID(element.brandId);
-        newShopping = newShopping.rebuild(
-            (sh) => sh[i] = sh[i].rebuild((s) => s..brand.replace(brand)));
-      }
-      var dataProduct =
-          product.data.rebuild((s) => s..shoppings.replace(newShopping));
-      return product.rebuild((b) => b..data.replace(dataProduct));
-    }
-
     return product;
   }
 
@@ -61,11 +46,7 @@ class ProductRepository {
     return product.documentID;
   }
 
-  Future<Product> editProduct(String documentID, Shopping shopping) async {
-    var product = await this.getProductByID(documentID);
-    var newShopping = product.data.shoppings.rebuild((b) => b..add(shopping));
-    await _productDataSource.editProduct(documentID, newShopping.toList());
-
-    return this.getProductByID(documentID);
-  }
+  Future<Product> editProduct(
+          String documentID, Map<String, dynamic> data) async =>
+      await _productDataSource.editProduct(documentID, data);
 }

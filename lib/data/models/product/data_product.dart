@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:remember_prices/data/models/product/index.dart';
 import 'package:remember_prices/data/shared/serializers/index.dart';
 
 part 'data_product.g.dart';
@@ -14,9 +13,6 @@ abstract class DataProduct implements Built<DataProduct, DataProductBuilder> {
   String get name;
   String get imageUrl;
   String get barcode;
-
-  @nullable
-  BuiltList<Shopping> get shoppings;
 
   DataProduct._();
 

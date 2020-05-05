@@ -36,7 +36,7 @@ abstract class ProductDelete extends ProductEvent
 abstract class ProductEdit extends ProductEvent
     implements Built<ProductEdit, ProductEditBuilder> {
   String get documentId;
-  Shopping get shopping;
+  Map<String, dynamic> get data;
   ProductEdit._();
 
   factory ProductEdit([updates(ProductEditBuilder b)]) = _$ProductEdit;

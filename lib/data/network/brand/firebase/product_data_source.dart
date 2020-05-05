@@ -27,15 +27,8 @@ class ProductDataSource {
     return query.documents.first;
   }
 
-  editProduct(String documentID, List<Shopping> shoppings) async {
-    var array = [];
-
-    for (var item in shoppings) {
-      array.add(
-          {"brandId": item.brandId, "date": item.date, "price": item.price});
-    }
-
-    await database.document(documentID).updateData({"shoppings": array});
+  editProduct(String documentID, Map<String, dynamic> data) async {
+    await database.document(documentID).updateData(data);
   }
 
   Future<DocumentSnapshot> getProductByID(String documentID) async =>

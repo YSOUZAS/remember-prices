@@ -23,10 +23,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   void onDeleteProduct(String documentID) =>
       add(ProductDelete((b) => b..documentID = documentID));
 
-  void onEditProduct(String documentId, Shopping shopping) =>
+  void onEditProduct(String documentId, Map<String, dynamic> data) =>
       add(ProductEdit((b) => b
         ..documentId = documentId
-        ..shopping.replace(shopping)));
+        ..data = data));
 
   void onGetById(String documentID) =>
       add(ProductGetById((b) => b..documentID = documentID));
@@ -72,7 +72,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Stream<ProductState> mapProductProductEdit(ProductEdit event) async* {
     try {
       final result =
-          await _repository.editProduct(event.documentId, event.shopping);
+          await _repository.editProduct(event.documentId, event.data);
       yield ProductState.successGetById(result);
     } on Exception catch (e) {
       yield ProductState.failure(e.toString());

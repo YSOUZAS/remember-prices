@@ -220,17 +220,17 @@ class _$ProductEdit extends ProductEdit {
   @override
   final String documentId;
   @override
-  final Shopping shopping;
+  final Map<String, dynamic> data;
 
   factory _$ProductEdit([void Function(ProductEditBuilder) updates]) =>
       (new ProductEditBuilder()..update(updates)).build();
 
-  _$ProductEdit._({this.documentId, this.shopping}) : super._() {
+  _$ProductEdit._({this.documentId, this.data}) : super._() {
     if (documentId == null) {
       throw new BuiltValueNullFieldError('ProductEdit', 'documentId');
     }
-    if (shopping == null) {
-      throw new BuiltValueNullFieldError('ProductEdit', 'shopping');
+    if (data == null) {
+      throw new BuiltValueNullFieldError('ProductEdit', 'data');
     }
   }
 
@@ -246,19 +246,19 @@ class _$ProductEdit extends ProductEdit {
     if (identical(other, this)) return true;
     return other is ProductEdit &&
         documentId == other.documentId &&
-        shopping == other.shopping;
+        data == other.data;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, documentId.hashCode), shopping.hashCode));
+    return $jf($jc($jc(0, documentId.hashCode), data.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ProductEdit')
           ..add('documentId', documentId)
-          ..add('shopping', shopping))
+          ..add('data', data))
         .toString();
   }
 }
@@ -270,16 +270,16 @@ class ProductEditBuilder implements Builder<ProductEdit, ProductEditBuilder> {
   String get documentId => _$this._documentId;
   set documentId(String documentId) => _$this._documentId = documentId;
 
-  ShoppingBuilder _shopping;
-  ShoppingBuilder get shopping => _$this._shopping ??= new ShoppingBuilder();
-  set shopping(ShoppingBuilder shopping) => _$this._shopping = shopping;
+  Map<String, dynamic> _data;
+  Map<String, dynamic> get data => _$this._data;
+  set data(Map<String, dynamic> data) => _$this._data = data;
 
   ProductEditBuilder();
 
   ProductEditBuilder get _$this {
     if (_$v != null) {
       _documentId = _$v.documentId;
-      _shopping = _$v.shopping?.toBuilder();
+      _data = _$v.data;
       _$v = null;
     }
     return this;
@@ -300,22 +300,8 @@ class ProductEditBuilder implements Builder<ProductEdit, ProductEditBuilder> {
 
   @override
   _$ProductEdit build() {
-    _$ProductEdit _$result;
-    try {
-      _$result = _$v ??
-          new _$ProductEdit._(
-              documentId: documentId, shopping: shopping.build());
-    } catch (_) {
-      String _$failedField;
-      try {
-        _$failedField = 'shopping';
-        shopping.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            'ProductEdit', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result =
+        _$v ?? new _$ProductEdit._(documentId: documentId, data: data);
     replace(_$result);
     return _$result;
   }

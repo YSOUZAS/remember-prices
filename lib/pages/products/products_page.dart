@@ -9,6 +9,7 @@ import 'package:remember_prices/routes/router.gr.dart';
 import 'package:remember_prices/shared/screens/index.dart';
 import 'package:remember_prices/shared/widgets/horizontal_card.dart';
 import 'package:remember_prices/shared/widgets/internal_cached_network_image.dart';
+import 'package:remember_prices/utils/theme.dart';
 
 class ProductsPage extends StatefulWidget {
   ProductsPage({Key key, this.vale}) : super(key: key);
@@ -74,10 +75,22 @@ class _ProductsPageState extends State<ProductsPage> {
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   topLeft: Radius.circular(8)),
-                              child: InternalCachedNetworkImage(
-                                url: state.products[index].data.imageUrl,
-                                height: 130.0,
-                                width: 92.0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: whiteTheme.shade500,
+                                  boxShadow: <BoxShadow>[
+                                    new BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 10.0,
+                                      offset: new Offset(10.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: InternalCachedNetworkImage(
+                                  url: state.products[index].data.imageUrl,
+                                  height: 130.0,
+                                  width: 92.0,
+                                ),
                               ),
                             ),
                           ],

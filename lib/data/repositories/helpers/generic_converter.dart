@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductConverter {
+class GenericConverter {
   static toMap(DocumentSnapshot document) {
-    Map<String, dynamic> productMap = {
+    Map<String, dynamic> map = {
       "documentID": document.documentID,
       "data": document.data
     };
-    return json.encode(productMap);
+    return json.encode(map);
   }
 }

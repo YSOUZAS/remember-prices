@@ -1,41 +1,36 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of shopping;
+part of data_shopping;
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<Shopping> _$shoppingSerializer = new _$ShoppingSerializer();
+Serializer<DataShopping> _$dataShoppingSerializer =
+    new _$DataShoppingSerializer();
 
-class _$ShoppingSerializer implements StructuredSerializer<Shopping> {
+class _$DataShoppingSerializer implements StructuredSerializer<DataShopping> {
   @override
-  final Iterable<Type> types = const [Shopping, _$Shopping];
+  final Iterable<Type> types = const [DataShopping, _$DataShopping];
   @override
-  final String wireName = 'Shopping';
+  final String wireName = 'DataShopping';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Shopping object,
+  Iterable<Object> serialize(Serializers serializers, DataShopping object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    if (object.brandId != null) {
-      result
-        ..add('brandId')
-        ..add(serializers.serialize(object.brandId,
-            specifiedType: const FullType(String)));
-    }
-    if (object.price != null) {
-      result
-        ..add('price')
-        ..add(serializers.serialize(object.price,
-            specifiedType: const FullType(double)));
-    }
-    if (object.date != null) {
-      result
-        ..add('date')
-        ..add(serializers.serialize(object.date,
-            specifiedType: const FullType(String)));
-    }
+    final result = <Object>[
+      'brandId',
+      serializers.serialize(object.brandId,
+          specifiedType: const FullType(String)),
+      'price',
+      serializers.serialize(object.price,
+          specifiedType: const FullType(double)),
+      'date',
+      serializers.serialize(object.date, specifiedType: const FullType(String)),
+      'productId',
+      serializers.serialize(object.productId,
+          specifiedType: const FullType(String)),
+    ];
     if (object.brand != null) {
       result
         ..add('brand')
@@ -52,9 +47,9 @@ class _$ShoppingSerializer implements StructuredSerializer<Shopping> {
   }
 
   @override
-  Shopping deserialize(Serializers serializers, Iterable<Object> serialized,
+  DataShopping deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ShoppingBuilder();
+    final result = new DataShoppingBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -74,6 +69,10 @@ class _$ShoppingSerializer implements StructuredSerializer<Shopping> {
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'productId':
+          result.productId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'brand':
           result.brand.replace(serializers.deserialize(value,
               specifiedType: const FullType(Brand)) as Brand);
@@ -89,7 +88,7 @@ class _$ShoppingSerializer implements StructuredSerializer<Shopping> {
   }
 }
 
-class _$Shopping extends Shopping {
+class _$DataShopping extends DataShopping {
   @override
   final String brandId;
   @override
@@ -97,31 +96,52 @@ class _$Shopping extends Shopping {
   @override
   final String date;
   @override
+  final String productId;
+  @override
   final Brand brand;
   @override
   final bool promotion;
 
-  factory _$Shopping([void Function(ShoppingBuilder) updates]) =>
-      (new ShoppingBuilder()..update(updates)).build();
+  factory _$DataShopping([void Function(DataShoppingBuilder) updates]) =>
+      (new DataShoppingBuilder()..update(updates)).build();
 
-  _$Shopping._(
-      {this.brandId, this.price, this.date, this.brand, this.promotion})
-      : super._();
+  _$DataShopping._(
+      {this.brandId,
+      this.price,
+      this.date,
+      this.productId,
+      this.brand,
+      this.promotion})
+      : super._() {
+    if (brandId == null) {
+      throw new BuiltValueNullFieldError('DataShopping', 'brandId');
+    }
+    if (price == null) {
+      throw new BuiltValueNullFieldError('DataShopping', 'price');
+    }
+    if (date == null) {
+      throw new BuiltValueNullFieldError('DataShopping', 'date');
+    }
+    if (productId == null) {
+      throw new BuiltValueNullFieldError('DataShopping', 'productId');
+    }
+  }
 
   @override
-  Shopping rebuild(void Function(ShoppingBuilder) updates) =>
+  DataShopping rebuild(void Function(DataShoppingBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ShoppingBuilder toBuilder() => new ShoppingBuilder()..replace(this);
+  DataShoppingBuilder toBuilder() => new DataShoppingBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Shopping &&
+    return other is DataShopping &&
         brandId == other.brandId &&
         price == other.price &&
         date == other.date &&
+        productId == other.productId &&
         brand == other.brand &&
         promotion == other.promotion;
   }
@@ -129,25 +149,31 @@ class _$Shopping extends Shopping {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, brandId.hashCode), price.hashCode), date.hashCode),
+        $jc(
+            $jc(
+                $jc($jc($jc(0, brandId.hashCode), price.hashCode),
+                    date.hashCode),
+                productId.hashCode),
             brand.hashCode),
         promotion.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Shopping')
+    return (newBuiltValueToStringHelper('DataShopping')
           ..add('brandId', brandId)
           ..add('price', price)
           ..add('date', date)
+          ..add('productId', productId)
           ..add('brand', brand)
           ..add('promotion', promotion))
         .toString();
   }
 }
 
-class ShoppingBuilder implements Builder<Shopping, ShoppingBuilder> {
-  _$Shopping _$v;
+class DataShoppingBuilder
+    implements Builder<DataShopping, DataShoppingBuilder> {
+  _$DataShopping _$v;
 
   String _brandId;
   String get brandId => _$this._brandId;
@@ -161,6 +187,10 @@ class ShoppingBuilder implements Builder<Shopping, ShoppingBuilder> {
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
 
+  String _productId;
+  String get productId => _$this._productId;
+  set productId(String productId) => _$this._productId = productId;
+
   BrandBuilder _brand;
   BrandBuilder get brand => _$this._brand ??= new BrandBuilder();
   set brand(BrandBuilder brand) => _$this._brand = brand;
@@ -169,13 +199,14 @@ class ShoppingBuilder implements Builder<Shopping, ShoppingBuilder> {
   bool get promotion => _$this._promotion;
   set promotion(bool promotion) => _$this._promotion = promotion;
 
-  ShoppingBuilder();
+  DataShoppingBuilder();
 
-  ShoppingBuilder get _$this {
+  DataShoppingBuilder get _$this {
     if (_$v != null) {
       _brandId = _$v.brandId;
       _price = _$v.price;
       _date = _$v.date;
+      _productId = _$v.productId;
       _brand = _$v.brand?.toBuilder();
       _promotion = _$v.promotion;
       _$v = null;
@@ -184,27 +215,28 @@ class ShoppingBuilder implements Builder<Shopping, ShoppingBuilder> {
   }
 
   @override
-  void replace(Shopping other) {
+  void replace(DataShopping other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$Shopping;
+    _$v = other as _$DataShopping;
   }
 
   @override
-  void update(void Function(ShoppingBuilder) updates) {
+  void update(void Function(DataShoppingBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$Shopping build() {
-    _$Shopping _$result;
+  _$DataShopping build() {
+    _$DataShopping _$result;
     try {
       _$result = _$v ??
-          new _$Shopping._(
+          new _$DataShopping._(
               brandId: brandId,
               price: price,
               date: date,
+              productId: productId,
               brand: _brand?.build(),
               promotion: promotion);
     } catch (_) {
@@ -214,7 +246,7 @@ class ShoppingBuilder implements Builder<Shopping, ShoppingBuilder> {
         _brand?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Shopping', _$failedField, e.toString());
+            'DataShopping', _$failedField, e.toString());
       }
       rethrow;
     }

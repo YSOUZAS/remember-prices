@@ -11,6 +11,7 @@ import 'package:remember_prices/shared/screens/index.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:remember_prices/shared/widgets/index.dart';
 import 'package:remember_prices/shared/widgets/times_series_chart.dart';
+import 'package:remember_prices/utils/index.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   ProductDetailScreen({Key key, this.documentId}) : super(key: key);
@@ -63,14 +64,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           onPressed: () {
             var shopping = new Shopping();
 
-            //\",\"price\":5.8,\"date\":\\
+            _showDialog();
 
-            shopping = shopping.rebuild((b) => b
-              ..brandId = "9nZiyVCdgK7zYg630BRh"
-              ..date = "20170919"
-              ..price = 10.9);
-
-            _productBloc.onEditProduct(widget.documentId, shopping);
+            //_productBloc.onEditProduct(widget.documentId, shopping);
           },
           child: Icon(FontAwesomeIcons.plus),
         ),
@@ -238,10 +234,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  InternalCachedNetworkImage _getImage(ProductState state) {
-    return InternalCachedNetworkImage(
-      url: state.product.data.imageUrl,
-      fit: BoxFit.cover,
+  Container _getImage(ProductState state) {
+    return Container(
+      decoration: BoxDecoration(color: whiteTheme.shade500),
+      child: InternalCachedNetworkImage(
+        url: state.product.data.imageUrl,
+        fit: BoxFit.cover,
+      ),
     );
   }
 

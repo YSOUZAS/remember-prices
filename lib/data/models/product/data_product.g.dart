@@ -27,13 +27,7 @@ class _$DataProductSerializer implements StructuredSerializer<DataProduct> {
       serializers.serialize(object.barcode,
           specifiedType: const FullType(String)),
     ];
-    if (object.shoppings != null) {
-      result
-        ..add('shoppings')
-        ..add(serializers.serialize(object.shoppings,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(Shopping)])));
-    }
+
     return result;
   }
 
@@ -60,12 +54,6 @@ class _$DataProductSerializer implements StructuredSerializer<DataProduct> {
           result.barcode = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'shoppings':
-          result.shoppings.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(Shopping)]))
-              as BuiltList<Object>);
-          break;
       }
     }
 
@@ -80,14 +68,11 @@ class _$DataProduct extends DataProduct {
   final String imageUrl;
   @override
   final String barcode;
-  @override
-  final BuiltList<Shopping> shoppings;
 
   factory _$DataProduct([void Function(DataProductBuilder) updates]) =>
       (new DataProductBuilder()..update(updates)).build();
 
-  _$DataProduct._({this.name, this.imageUrl, this.barcode, this.shoppings})
-      : super._() {
+  _$DataProduct._({this.name, this.imageUrl, this.barcode}) : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('DataProduct', 'name');
     }
@@ -112,15 +97,13 @@ class _$DataProduct extends DataProduct {
     return other is DataProduct &&
         name == other.name &&
         imageUrl == other.imageUrl &&
-        barcode == other.barcode &&
-        shoppings == other.shoppings;
+        barcode == other.barcode;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, name.hashCode), imageUrl.hashCode), barcode.hashCode),
-        shoppings.hashCode));
+    return $jf(
+        $jc($jc($jc(0, name.hashCode), imageUrl.hashCode), barcode.hashCode));
   }
 
   @override
@@ -128,8 +111,7 @@ class _$DataProduct extends DataProduct {
     return (newBuiltValueToStringHelper('DataProduct')
           ..add('name', name)
           ..add('imageUrl', imageUrl)
-          ..add('barcode', barcode)
-          ..add('shoppings', shoppings))
+          ..add('barcode', barcode))
         .toString();
   }
 }
@@ -149,12 +131,6 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
   String get barcode => _$this._barcode;
   set barcode(String barcode) => _$this._barcode = barcode;
 
-  ListBuilder<Shopping> _shoppings;
-  ListBuilder<Shopping> get shoppings =>
-      _$this._shoppings ??= new ListBuilder<Shopping>();
-  set shoppings(ListBuilder<Shopping> shoppings) =>
-      _$this._shoppings = shoppings;
-
   DataProductBuilder();
 
   DataProductBuilder get _$this {
@@ -162,7 +138,6 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
       _name = _$v.name;
       _imageUrl = _$v.imageUrl;
       _barcode = _$v.barcode;
-      _shoppings = _$v.shoppings?.toBuilder();
       _$v = null;
     }
     return this;
@@ -183,25 +158,8 @@ class DataProductBuilder implements Builder<DataProduct, DataProductBuilder> {
 
   @override
   _$DataProduct build() {
-    _$DataProduct _$result;
-    try {
-      _$result = _$v ??
-          new _$DataProduct._(
-              name: name,
-              imageUrl: imageUrl,
-              barcode: barcode,
-              shoppings: _shoppings?.build());
-    } catch (_) {
-      String _$failedField;
-      try {
-        _$failedField = 'shoppings';
-        _shoppings?.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            'DataProduct', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result = _$v ??
+        new _$DataProduct._(name: name, imageUrl: imageUrl, barcode: barcode);
     replace(_$result);
     return _$result;
   }
