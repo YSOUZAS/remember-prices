@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:remember_prices/data/models/brand/index.dart';
 import 'package:remember_prices/data/models/shopping/index.dart';
 import 'package:remember_prices/data/shared/serializers/index.dart';
 
