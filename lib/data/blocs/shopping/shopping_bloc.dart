@@ -12,7 +12,7 @@ class GetAllShoppingsFromProductIdBloc
   GetAllShoppingsFromProductIdState get initialState =>
       GetAllShoppingsFromProductIdState.initial();
 
-  void onGetAllShoppingsFromProductIdState(String productId) =>
+  void onInitiated(String productId) =>
       add(GetAllShoppingsFromProductIdStateInitiated(
           (b) => b..productId = productId));
 

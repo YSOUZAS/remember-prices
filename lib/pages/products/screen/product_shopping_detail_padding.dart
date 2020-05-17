@@ -25,8 +25,7 @@ class _ProductShoppingDetailPaddingState
   @override
   void initState() {
     super.initState();
-    _getAllShoppingsFromProductIdBloc
-        .onGetAllShoppingsFromProductIdState(widget.productId);
+    _getAllShoppingsFromProductIdBloc.onInitiated(widget.productId);
   }
 
   @override
@@ -107,25 +106,6 @@ String _getHighestPrice(BuiltList<Shopping> shopping) {
   list.sort((a, b) => a.data.price.compareTo(b.data.price));
 
   return list.last.data.price.toStringAsFixed(2);
-}
-
-SliverPadding _getSliverPadding(GetAllShoppingsFromProductIdState state) {
-  return SliverPadding(
-    padding: const EdgeInsets.all(8.0),
-    sliver: SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          SizedBox(height: 5),
-          _getMiddleContainer(state),
-          SizedBox(height: 50),
-          Container(
-            height: 400,
-            child: _getCardWidget(state),
-          )
-        ],
-      ),
-    ),
-  );
 }
 
 Card _getCardWidget(GetAllShoppingsFromProductIdState state) {

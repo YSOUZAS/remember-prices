@@ -15,7 +15,7 @@ void initiKiwi() {
     ..registerFactory((c) => BrandRepository(c.resolve()))
     ..registerFactory((c) => BrandBloc(c.resolve()))
     ..registerFactory((c) => ProductDataSource(c.resolve()))
-    ..registerFactory((c) => ProductRepository(c.resolve(), c.resolve()))
+    ..registerFactory((c) => ProductRepository(c.resolve()))
     ..registerFactory((c) => ProductBloc(c.resolve()))
     ..registerFactory((c) => ShoppingDataSource(c.resolve()))
     ..registerFactory((c) => ShoppingRepository(c.resolve()))

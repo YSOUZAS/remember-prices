@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:remember_prices/data/blocs/product/product_event.dart';
 import 'package:remember_prices/data/blocs/product/product_state.dart';
-import 'package:remember_prices/data/models/product/index.dart';
 import 'package:remember_prices/data/repositories/firebase/index.dart';
 
 import 'product_state.dart';
@@ -36,7 +35,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     yield ProductState.loading();
 
     if (event is ProductInitiated) yield* mapProductInitiated(event);
-    if (event is ProductInsert) yield* mapProductInsert(event);
     if (event is ProductDelete) yield* mapProductProductDelete(event);
     if (event is ProductEdit) yield* mapProductProductEdit(event);
     if (event is ProductGetById) yield* mapProductProductGetById(event);
@@ -46,15 +44,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       final searchResult = await _repository.getProducts();
       yield ProductState.success(searchResult);
-    } on Exception catch (e) {
-      yield ProductState.failure(e.toString());
-    }
-  }
-
-  Stream<ProductState> mapProductInsert(ProductInsert event) async* {
-    try {
-      await _repository.insertProduct(event.name);
-      onProductInitiated();
     } on Exception catch (e) {
       yield ProductState.failure(e.toString());
     }

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:remember_prices/data/models/product/index.dart';
 
 class ProductDataSource {
   final Firestore db;
@@ -12,8 +9,11 @@ class ProductDataSource {
 
   Future<QuerySnapshot> getProducts() async => await database.getDocuments();
 
-  insertProduct(String name) async =>
-      await database.add({"name": name, "imageUrl": ""});
+  Future<DocumentReference> insertProduct(Map<String, dynamic> data) async {
+    var result = await database.add(data);
+
+    return result;
+  }
 
   deleteProduct(String documentID) async =>
       await database.document(documentID).delete();
@@ -23,8 +23,9 @@ class ProductDataSource {
         .where("barcode", isEqualTo: barcode)
         .limit(1)
         .getDocuments();
+    if (query.documents.length > 0) return query.documents.first;
 
-    return query.documents.first;
+    return null;
   }
 
   editProduct(String documentID, Map<String, dynamic> data) async {

@@ -11,17 +11,28 @@ import 'package:remember_prices/pages/home/home_page.dart';
 import 'package:remember_prices/pages/brands/brands_page.dart';
 import 'package:remember_prices/pages/products/products_page.dart';
 import 'package:remember_prices/pages/products/screen/product_detail_screen.dart';
+import 'package:remember_prices/pages/products/screen/insert_product_screen.dart';
 
 abstract class Routes {
   static const homePage = '/';
   static const brandsPage = '/brands-page';
   static const productsPage = '/products-page';
   static const productDetailScreen = '/product-detail-screen';
+  static const inserProductScreen = '/inser-product-screen';
+  static const all = {
+    homePage,
+    brandsPage,
+    productsPage,
+    productDetailScreen,
+    inserProductScreen,
+  };
 }
 
 class Router extends RouterBase {
-  //This will probably be removed in future versions
-  //you should call ExtendedNavigator.ofRouter<Router>() directly
+  @override
+  Set<String> get allRoutes => Routes.all;
+
+  @Deprecated('call ExtendedNavigator.ofRouter<Router>() directly')
   static ExtendedNavigatorState get navigator =>
       ExtendedNavigator.ofRouter<Router>();
 
@@ -61,15 +72,26 @@ class Router extends RouterBase {
               key: typedArgs.key, documentId: typedArgs.documentId),
           settings: settings,
         );
+      case Routes.inserProductScreen:
+        if (hasInvalidArgs<InserProductScreenArguments>(args)) {
+          return misTypedArgsRoute<InserProductScreenArguments>(args);
+        }
+        final typedArgs = args as InserProductScreenArguments ??
+            InserProductScreenArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => InserProductScreen(
+              key: typedArgs.key, barcode: typedArgs.barcode),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
   }
 }
 
-//**************************************************************************
+// *************************************************************************
 // Arguments holder classes
-//***************************************************************************
+// **************************************************************************
 
 //ProductsPage arguments holder class
 class ProductsPageArguments {
@@ -83,4 +105,11 @@ class ProductDetailScreenArguments {
   final Key key;
   final String documentId;
   ProductDetailScreenArguments({this.key, this.documentId});
+}
+
+//InserProductScreen arguments holder class
+class InserProductScreenArguments {
+  final Key key;
+  final String barcode;
+  InserProductScreenArguments({this.key, this.barcode});
 }

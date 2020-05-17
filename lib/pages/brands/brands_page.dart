@@ -5,7 +5,6 @@ import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:remember_prices/data/blocs/brand/brand_state.dart';
 import 'package:remember_prices/shared/screens/index.dart';
 import 'package:remember_prices/shared/widgets/card_list_tile.dart';
-import 'package:remember_prices/shared/widgets/index.dart';
 
 class BrandsPage extends StatefulWidget {
   static const String routeName = '/brands';

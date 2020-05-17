@@ -21,13 +21,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var result = await Barcode.scan();
+          var barcode = await Barcode.scan();
+          if (barcode.isEmpty) return;
+
           final productRepository =
               kiwi.Container().resolve<ProductRepository>();
           var documentId =
-              await productRepository.getDocumentIdByBarcode(result);
-          ExtendedNavigator.of(context).pushNamed(Routes.productDetailScreen,
-              arguments: ProductDetailScreenArguments(documentId: documentId));
+              await productRepository.getDocumentIdByBarcode(barcode);
+
+          if (documentId != null)
+            ExtendedNavigator.of(context).pushNamed(Routes.productDetailScreen,
+                arguments:
+                    ProductDetailScreenArguments(documentId: documentId));
+          else
+            ExtendedNavigator.of(context).pushNamed(Routes.inserProductScreen,
+                arguments: InserProductScreenArguments(barcode: barcode));
         },
         child: Icon(FontAwesomeIcons.barcode),
       ),

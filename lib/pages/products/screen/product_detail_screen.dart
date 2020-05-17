@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:remember_prices/data/blocs/product/product_bloc.dart';
@@ -21,10 +22,13 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productBloc = kiwi.Container().resolve<ProductBloc>();
-  final priceController = TextEditingController();
   final dateController = TextEditingController();
   final _getAllShoppingsFromProductIdBloc =
       kiwi.Container().resolve<GetAllShoppingsFromProductIdBloc>();
+  final controller = new MoneyMaskedTextController(
+    decimalSeparator: '.',
+  );
+  var finaldate;
 
   @override
   void initState() {
@@ -109,8 +113,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  _showDialog() async {
-    await showDialog<String>(
+  void callDatePicker() async {
+    var order = await getDate();
+    setState(() {
+      finaldate = order;
+    });
+  }
+
+  Future<DateTime> getDate() {
+    return showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Future<String> _showDialog() async {
+    return await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -120,15 +146,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: <Widget>[
                   new TextField(
                     autofocus: true,
-                    controller: priceController,
+                    controller: controller,
                     decoration: new InputDecoration(
-                        labelText: 'Price', hintText: 'eg. 4.98'),
+                        labelText: 'Price', hintText: 'eg. 4,98'),
                   ),
-                  new TextField(
-                    autofocus: true,
-                    controller: dateController,
-                    decoration: new InputDecoration(
-                        labelText: 'Date', hintText: 'eg. 20200101'),
+                  Container(
+                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: finaldate == null
+                        ? Text(
+                            "Use below button to Select a Date",
+                            textScaleFactor: 1.0,
+                          )
+                        : Text(
+                            "$finaldate",
+                            textScaleFactor: 1.0,
+                          ),
+                  ),
+                  new RaisedButton(
+                    onPressed: callDatePicker,
+                    color: Colors.blueAccent,
+                    child: new Text('Click here',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -137,26 +176,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               new FlatButton(
                   child: const Text('CANCEL'),
                   onPressed: () {
-                    Navigator.pop(context);
-                    return 0;
+                    Navigator.pop(context, "false");
                   }),
               new FlatButton(
-                  child: const Text('OPEN'),
-                  onPressed: () async {
-                    var map = {
-                      "price": double.parse(priceController.text.trim()),
-                      "date": dateController.text.trim(),
-                      "productId": widget.documentId,
-                      "brandId": "9nZiyVCdgK7zYg630BRh"
-                    };
-
-                    var _shoppingRepository =
-                        kiwi.Container().resolve<ShoppingRepository>();
-
-                    await _shoppingRepository.insertShopping(map);
-                    _getAllShoppingsFromProductIdBloc
-                        .onGetAllShoppingsFromProductIdState(widget.documentId);
-                    Navigator.pop(context);
+                  child: const Text('CONFIRM'),
+                  onPressed: () {
+                    Navigator.pop(context, "true");
                   })
             ],
           );
@@ -169,7 +194,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await _showDialog();
+            var response = await _showDialog();
+            if (response == "false") return;
+
+            var month = finaldate.month.toString().length == 1
+                ? "0${finaldate.month}"
+                : finaldate.month.toString();
+            var day = finaldate.day.toString().length == 1
+                ? "0${finaldate.day}"
+                : finaldate.day.toString();
+
+            var map = {
+              "price": double.parse(controller.text.trim()),
+              "date": "${finaldate.year}$month$day",
+              "productId": widget.documentId,
+              "brandId": "9nZiyVCdgK7zYg630BRh"
+            };
+
+            var _shoppingRepository =
+                kiwi.Container().resolve<ShoppingRepository>();
+
+            await _shoppingRepository.insertShopping(map);
+
+            _productBloc.onGetById(widget.documentId);
           },
           child: Icon(FontAwesomeIcons.plus),
         ),

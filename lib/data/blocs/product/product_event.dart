@@ -1,7 +1,6 @@
 library product_event;
 
 import 'package:built_value/built_value.dart';
-import 'package:remember_prices/data/models/product/index.dart';
 
 part 'product_event.g.dart';
 
