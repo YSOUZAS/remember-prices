@@ -2,12 +2,14 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:remember_prices/data/models/shopping/index.dart';
 import 'package:remember_prices/data/network/shopping/firebase/index.dart';
+import 'package:remember_prices/data/repositories/firebase/brand_repository.dart';
 import 'package:remember_prices/data/repositories/helpers/generic_converter.dart';
 
 class ShoppingRepository {
   final ShoppingDataSource _shoppingDataSource;
+  final BrandRepository _brandRepository;
 
-  ShoppingRepository(this._shoppingDataSource);
+  ShoppingRepository(this._shoppingDataSource, this._brandRepository);
 
   Future<BuiltList<Shopping>> getShoppings() async {
     final result = await _shoppingDataSource.getShoppings();
@@ -41,7 +43,11 @@ class ShoppingRepository {
       for (DocumentSnapshot document in result) {
         var mapShopping = GenericConverter.toMap(document);
         var shopping = Shopping.fromJson(mapShopping);
-        shoppings = (shoppings.toBuilder()..add(shopping)).build();
+        var brand = await _brandRepository.getBrandByID(shopping.data.brandId);
+        var newShopping = shopping.rebuild((s) => s.data
+            .replace(shopping.data.rebuild((b) => b..brand.replace(brand))));
+
+        shoppings = (shoppings.toBuilder()..add(newShopping)).build();
       }
     }
 

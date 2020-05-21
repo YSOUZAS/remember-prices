@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remember_prices/data/blocs/shopping/index.dart';
 import 'package:remember_prices/data/models/shopping/index.dart';
 import 'package:remember_prices/shared/screens/index.dart';
+import 'package:remember_prices/shared/widgets/card_list_tile.dart';
 import 'package:remember_prices/shared/widgets/times_series_chart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:kiwi/kiwi.dart' as kiwi;
@@ -62,6 +63,25 @@ class _ProductShoppingDetailPaddingState
                     Container(
                       height: 400,
                       child: _getCardWidget(state),
+                    ),
+                    SizedBox(height: 50),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          child: Column(
+                            children:
+                                state.shoppings.map<CardListTile>((shopping) {
+                              return CardListTile(
+                                title:
+                                    "${shopping.data.brand.data.name} - \$${shopping.data.price} ",
+                                url: shopping.data?.brand?.data?.imageUrl
+                                    ?.toString(),
+                                fit: BoxFit.fitWidth,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

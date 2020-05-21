@@ -18,7 +18,7 @@ void initiKiwi() {
     ..registerFactory((c) => ProductRepository(c.resolve()))
     ..registerFactory((c) => ProductBloc(c.resolve()))
     ..registerFactory((c) => ShoppingDataSource(c.resolve()))
-    ..registerFactory((c) => ShoppingRepository(c.resolve()))
+    ..registerFactory((c) => ShoppingRepository(c.resolve(), c.resolve()))
     ..registerFactory((c) => GetAllShoppingsFromProductIdBloc(c.resolve()));
 
   kiwi.Container().silent = true;

@@ -9,7 +9,6 @@ import 'package:remember_prices/data/repositories/firebase/shopping_repository.d
 import 'package:remember_prices/routes/router.gr.dart';
 import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:remember_prices/shared/screens/index.dart';
-import 'package:remember_prices/shared/widgets/card_list_tile.dart';
 import 'package:remember_prices/shared/widgets/index.dart';
 
 class InserProductScreen extends StatefulWidget {
